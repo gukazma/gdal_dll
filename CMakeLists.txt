@@ -9,7 +9,7 @@ if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No CMAKE_BUILD_TYPE selected, defaulting to ${CMAKE_BUILD_TYPE}")
 endif ()
 
-project(CppTemplateProject VERSION 0.1 LANGUAGES CXX)
+project(GDAL_DLL VERSION 0.1 LANGUAGES CXX)
 
 option(ENABLE_DOCS "Enable doxygen docs" ON)
 
@@ -36,6 +36,8 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
       "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there."
   )
 endif()
+
+find_package(GDAL CONFIG REQUIRED)
 
 add_subdirectory(Modules)
 add_subdirectory(Apps)
