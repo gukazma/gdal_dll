@@ -37,3 +37,5 @@ add_test(
     NAME ${TARGET_NAME}
     COMMAND ${TARGET_NAME}
 )
+
+add_custom_command(TARGET TEST POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources $<TARGET_FILE_DIR:TEST>)

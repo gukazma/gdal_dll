@@ -5,7 +5,12 @@
 void GDAL_DLL() {
     // 注册所有的GDAL驱动
     GDALAllRegister();
-    CPLGetConfigOption("GDAL_DATA", NULL);
+    // gdal数据库位置
+    std::string gdaldataPath = "./gdal_data";
+    std::string projdataPath = "./proj";
+    const char* paths[]      = {gdaldataPath.c_str(), projdataPath.c_str(), nullptr};
+    OSRSetPROJSearchPaths(paths);
+    CPLSetConfigOption("GDAL_DATA", gdaldataPath.c_str());
     // 打开栅格数据集
     GDALDataset* poDataset = (GDALDataset*)GDALOpen("your_raster_dataset.tif", GA_ReadOnly);
     if (poDataset == NULL) {
