@@ -3,6 +3,7 @@
   "version-string": "latest",
   "dependencies": [
     "gtest",
-    "gdal"
+    "gdal",
+    "boost"
   ]
 }
