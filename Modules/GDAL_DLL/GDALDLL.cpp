@@ -10,7 +10,7 @@ void GDAL_DLL() {
     OSRSetPROJSearchPaths(paths);
     CPLSetConfigOption("GDAL_DATA", gdaldataPath.c_str());
     OGRSpatialReference oSRS;
-    oSRS.importFromEPSG(4326);
+    oSRS.importFromEPSG(4346);
     char* pszWKT = NULL;
     oSRS.exportToPrettyWkt(&pszWKT, FALSE);
     std::cout << pszWKT << std::endl;

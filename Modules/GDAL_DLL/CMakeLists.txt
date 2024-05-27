@@ -18,7 +18,11 @@ target_compile_options(${TARGET_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:
 # Link dependencies    
 target_link_libraries(${TARGET_NAME} 
     PUBLIC
-    GDAL::GDAL
+GDAL::GDAL
+Boost::system
+Boost::filesystem
+Boost::dynamic_linking
+Boost::thread
           )
 
 target_include_directories(

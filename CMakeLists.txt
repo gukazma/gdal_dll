@@ -38,6 +38,7 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
 endif()
 
 find_package(GDAL CONFIG REQUIRED)
+find_package(Boost COMPONENTS filesystem system thread REQUIRED)
 
 add_subdirectory(Modules)
 add_subdirectory(Apps)
