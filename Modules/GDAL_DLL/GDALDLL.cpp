@@ -6,18 +6,27 @@
 #include <boost/filesystem.hpp>
 void CoordinateTransformation(double* input, int intputEPSG, int outputEPSG)
 {
+    GDALAllRegister();
     boost::filesystem::path binPath = boost::dll::program_location();
-    auto                    gdaldataPath = binPath / "gdal_data";
-    auto                    projdataPath = binPath / "gdal_data";
-    const char* paths[] = {gdaldataPath.string().c_str(), projdataPath.string().c_str(), nullptr};
+    auto                    gdaldataPath = binPath.parent_path() / "gdal_data";
+    auto                    projdataPath = binPath.parent_path() / "proj";
+    std::string             sgdaldataPath = gdaldataPath.string(), sprojdataPath = projdataPath.string();
+
+    const char* paths[] = {sgdaldataPath.c_str(), sprojdataPath.c_str(), nullptr};
 
     OSRSetPROJSearchPaths(paths);
-    CPLSetConfigOption("GDAL_DATA", gdaldataPath.string().c_str());
+    CPLSetConfigOption("GDAL_DATA", sgdaldataPath.c_str());
 
-    OGRSpatialReference oSRS, tSRS;
-    oSRS.importFromEPSG(intputEPSG);
-    tSRS.importFromEPSG(outputEPSG);
+    OGRSpatialReference          oSourceSRS, oTargetSRS;
+    OGRCoordinateTransformation* poCT;
 
-    auto poCT = OGRCreateCoordinateTransformation(&oSRS, &tSRS);
-    poCT->Transform(1, &input[0], &input[1]);
+    oSourceSRS.importFromEPSG(intputEPSG);
+    oTargetSRS.importFromEPSG(outputEPSG);
+
+    poCT = OGRCreateCoordinateTransformation(&oSourceSRS, &oTargetSRS);
+
+    double x = input[0], y = input[1];
+    poCT->Transform(1, &y, &x);
+    input[0] = x;
+    input[1] = y;
 }

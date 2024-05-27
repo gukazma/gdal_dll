@@ -11,6 +11,8 @@ endif ()
 
 project(GDAL_DLL VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/output)
+
 option(ENABLE_DOCS "Enable doxygen docs" ON)
 
 # just for qt
