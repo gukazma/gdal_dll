@@ -2,17 +2,22 @@
 #include  <gdal.h>
 #include <gdal_priv.h>
 #include <iostream>
-void GDAL_DLL() {
-    GDALAllRegister();
-    std::string gdaldataPath = "D:/projects/gdal_dll/build/vs2022-x64/Tests/Debug/gdal_data";
-    std::string projdataPath = "D:/projects/gdal_dll/build/vs2022-x64/Tests/Debug/proj";
-    const char* paths[]      = {gdaldataPath.c_str(), projdataPath.c_str(), nullptr};
+#include <boost/dll.hpp>
+#include <boost/filesystem.hpp>
+void CoordinateTransformation(double* input, int intputEPSG, int outputEPSG)
+{
+    boost::filesystem::path binPath = boost::dll::program_location();
+    auto                    gdaldataPath = binPath / "gdal_data";
+    auto                    projdataPath = binPath / "gdal_data";
+    const char* paths[] = {gdaldataPath.string().c_str(), projdataPath.string().c_str(), nullptr};
+
     OSRSetPROJSearchPaths(paths);
-    CPLSetConfigOption("GDAL_DATA", gdaldataPath.c_str());
-    OGRSpatialReference oSRS;
-    oSRS.importFromEPSG(4346);
-    char* pszWKT = NULL;
-    oSRS.exportToPrettyWkt(&pszWKT, FALSE);
-    std::cout << pszWKT << std::endl;
-    CPLFree(pszWKT);
+    CPLSetConfigOption("GDAL_DATA", gdaldataPath.string().c_str());
+
+    OGRSpatialReference oSRS, tSRS;
+    oSRS.importFromEPSG(intputEPSG);
+    tSRS.importFromEPSG(outputEPSG);
+
+    auto poCT = OGRCreateCoordinateTransformation(&oSRS, &tSRS);
+    poCT->Transform(1, &input[0], &input[1]);
 }
